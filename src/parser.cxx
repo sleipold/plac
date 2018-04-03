@@ -438,7 +438,7 @@ void vardecl() {
 	}
 
 	lookahead = nextsymbol();
-	// mehrere Deklerationen können folgen
+	// mehrere var-Deklerationen können folgen
 	switch(lookahead) {
 		case KOMMA:
 			lookahead = nextsymbol();
@@ -449,13 +449,12 @@ void vardecl() {
 			return;
 		case default:
 			error(5);
-			break;
 	}
 	return;	// end vardecl
 }
 
 /****************** constdecl ***************************************************/
-/* analysiert wird der korrekte Aufbau einer Variablendeklaration
+/* analysiert wird der korrekte Aufbau einer Variablen(Konstanten-)deklaration
 nach folgender Syntax:
 
 			CONSTDECL 	::=	 const IDENT '=' INTNUMBER {',' IDENT '=' INTNUMBER } * ';'
@@ -469,14 +468,47 @@ Schnittstelle:
 
 */
 void constdecl() {
-  st_entry *neu, *found;
+	st_entry *neu, *found;
 
 	if (tracesw)
-	    trace<<"\n Zeile:"<< lineno<<"Konstantendeklaration:";
+		trace<<"\n Zeile:"<< lineno<<"Konstantendeklaration:";
 
 	// auf const muss IDENT folgen
-  // TODO
-  return;		// end constdecl
+	// TODO
+	if(lookahead != ID) {
+		error(4);
+	}
+
+	lookahead = nextsymbol();
+	if(lookahead != EQ) {
+		error(3);
+	}
+
+	lookahead = nextsymbol();
+	if(lookahead != INTNUM) {
+		error(2);
+	}
+
+	if(lookup_in_actsym(idname) != NULL) {
+		error(34);
+	}
+
+	insert(KONST);
+
+	// mehrere const-Deklerationen können folgen
+	lookahead = nextsymbol();
+	switch(lookahead) {
+		case KOMMA:
+			lookahead = nextsymbol();
+			constdecl();
+			break;
+		case SEMICOLON:
+			lookahead = nextsymbol();
+			return;
+		case default:
+			error(5);
+	}
+	return;		// end constdecl
 }
 
 
@@ -490,7 +522,7 @@ void constdecl() {
 		BLOCK		::= 	[ CONSTDECL ]
 							[ VARDECL ]
 							  PROCDECL
-							STATEMENT
+							  STATEMENT
 
 
 
@@ -512,17 +544,35 @@ Schnittstelle:
 */
 /* symtable * neusym :	Zeiger auf neue ST */
 void block(symtable * neusym) {
-  if (tracesw)
-	  trace<<"\n Zeile:"<< lineno<<"Block";
+	if (tracesw)
+		trace<<"\n Zeile:"<< lineno<<"Block";
 
 	// actsym auf neue Symboltabelle setzen
+	actsym = neusym;
 
-  // TODO
+	// TODO
+	if( lookahead == CONST ) {
+		lookahead = nextsymbol();
+		constdecl();
+	}
+
+	if( lookahead == VAR ) {
+		lookahead = nextsymbol();
+		vardecl();
+	}
+
+	if( lookahead == PROCEDURE ) {
+		lookahead = nextsymbol();
+		procdecl();
+	}
+
+	statement();
 
 	// bei Blockende : Symboltabelle zurücksetzen
 	// actsym = Zeiger auf vorherige Symboltabelle
-  // TODO
-  return;
+	actsym = neusym.precsym;
+	// TODO
+	return;
 }
 
 
