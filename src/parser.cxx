@@ -214,7 +214,79 @@ void statement() {
 
   // überprüfung des aktuellen lex. Symbols
   // TODO
-  return;	// end statement
+  	// IDENT  ':=' EXPRESSION
+	if(lookahead == ID) {
+		// ST nach idname durchsuchen, idname muss bereits existieren
+		if((found = lookup(idname)) == NULL) {
+			error(10);
+		}
+
+		lookahead = nextsymbol();
+		if(lookahead != ASS) {
+			error(40);
+		}
+
+		if(found->token == KONST || found->token == PROC) {
+			error(11);
+		}
+
+		lookahead = nextsymbol();
+		exp();
+	}
+
+	// call IDENT 
+	else if(lookahead == CALL) {
+		lookahead = nextsymbol();
+		if(lookahead != ID) {
+			error(13);
+		}
+
+		// ST nach idname durchsuchen, idname muss bereits existieren
+		found = lookup(idname);
+		if(found == NULL) {
+			error(10);
+		}
+
+		// in CALL-Anweisung darf ausschließlich PROC auftreten
+		if(found->token != PROC) {
+			error(14);
+		}
+
+		lookahead = nextsymbol();
+	}
+
+	// begin STATEMENT { ';' STATEMENT }* end
+	else if(lookahead == BEGIN) {
+		lookahead = nextsymbol();
+		statement();
+		while(lookahead == SEMICOLON) {
+			lookahead = nextsymbol();
+			statement();
+		}
+		if(lookahead != END) {
+			error(16);
+		}
+		lookahead = nextsymbol();
+	}
+
+	//if CONDITION then STATEMENT [else STATEMENT ] fi
+
+	// while CONDITION do STATEMENT
+	else if(lookahead == WHILE) {
+		lookahead = nextsymbol();
+		condition();
+		if(lookahead != DO) {
+			error(17);
+		}
+		lookahead = nextsymbol();
+		statement();
+	}
+	
+	else {
+		errortext("Statement wird erwartet");
+	}
+
+  return;
 }
 
 
