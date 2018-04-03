@@ -206,15 +206,15 @@ Schnittstelle:
 
 */
 void statement() {
-  st_entry *found;		// Zeiger auf ST-Eintrag
-  int typ_left, typ_right;
+	st_entry *found;		// Zeiger auf ST-Eintrag
+	int typ_left, typ_right;
 
-  if (tracesw)
-      trace<<"\n Zeile:"<< lineno<<"Statement";
+	if (tracesw)
+		trace<<"\n Zeile:"<< lineno<<"Statement";
 
-  // überprüfung des aktuellen lex. Symbols
-  // TODO
-  	// IDENT  ':=' EXPRESSION
+	// überprüfung des aktuellen lex. Symbols
+	// TODO
+	// IDENT  ':=' EXPRESSION
 	if(lookahead == ID) {
 		// ST nach idname durchsuchen, idname muss bereits existieren
 		if((found = lookup(idname)) == NULL) {
@@ -282,6 +282,7 @@ void statement() {
 		statement();
 
 		lookahead = nextsymbol();
+		// hier darf entweder else oder fi folgen
 		switch(lookahead) {
 			case ELSE:
 				statement();
@@ -307,17 +308,17 @@ void statement() {
 		if(lookahead != DO) {
 			error(17);
 		}
-		
+
 		lookahead = nextsymbol();
 		statement();
 	}
-	
+
 	else {
 		errortext("Statement wird erwartet");
 	}
 
 	lookahead = nextsymbol();
-	return;
+	return;	// end statement
 }
 
 
@@ -337,15 +338,53 @@ Schnittstelle:
 
 */
 void procdecl() {
-  st_entry* neu, *found;          // Zeiger auf ST-Eintrag
+	st_entry* neu, *found;          // Zeiger auf ST-Eintrag
 
-  symtable* neusym;		// Zeiger auf Symboltabelle
+	symtable* neusym;		// Zeiger auf Symboltabelle
 
-  if (tracesw)
-	  trace<<"\n Zeile:"<< lineno<<"Procdeklaration:";
+	if (tracesw)
+		trace<<"\n Zeile:"<< lineno<<"Procdeklaration:";
 
-  // TODO
-  return;   // end procdecl
+	// TODO
+	if(lookahead != ID) {
+		error(4);
+	} 
+
+	// Überprüfung ob idname bereits im aktuellen scope bekannt
+	if(lookup_in_actsym(idname) == NULL) {
+		error(34);
+	}
+
+	insert(PROC);
+
+	// liefert den neuen Eintrag in der neuen ST
+	neu = lookup_in_actsym(idname);
+	// neue ST holen
+	actsym = neu->subsym;
+
+	lookahead = nextsymbol();
+	if(lookahead != SEMICOLON) {
+		error(5);
+	}
+
+	lookahead = nextsymbol();
+	block(actsym);
+
+	lookahead = nextsymbol();
+	if(lookahead != SEMICOLON) {
+		error(5);
+	}
+
+	// alte ST holen
+	actsym = actsym->precsym;
+
+	lookahead = nextsymbol();
+	while(lookahead == PROCEDURE) {
+		lookahead(nextsymbol);
+		procdecl();
+	}
+
+	return;   // end procdecl
 }
 
 
