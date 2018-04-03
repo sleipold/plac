@@ -2,7 +2,7 @@
 # J. Uhrmann, 09.11.2005
 
 # Verwendung fuer Aufgabe 1:
-#	
+#
 #	make lexmain
 #	make parsemain
 
@@ -12,7 +12,7 @@
 #	$< kennzeichnet die _erste_ der benoetigten Dateien
 
 # Hinweise zu den verwendeten Funktionen
-#	$(wildcard muster) 
+#	$(wildcard muster)
 #		sucht nach Dateien, auf die das Muster passt und gibt eine Liste
 #		der Dateinamen zurueck. * und ? werden wie in der Shell verwendet
 #
@@ -27,28 +27,28 @@ LDFLAGS=
 # Regeln, die _keine_ Dateien mit dem Namen der Regel erstellen, sind "phony"
 .PHONY: clean
 
-
 # Uebersetzung des Scanners aus Aufgabe 1
 lexmain: lexmain.o init.o error.o lexan.o symbol.o parser.o
-	g++ $(LDFLAGS) -o $@ $^
+	cd build && g++ $(LDFLAGS) -o ../$@ $^
 
 # Uebersetzung des Parsers aus Aufgabe 1
 parsemain: parsemain.o init.o error.o lexan.o symbol.o parser.o
-	g++ $(LDFLAGS) -o $@ $^
+	cd build && g++ $(LDFLAGS) -o ../$@ $^
 
 
 # allgemeine Regel zur Erstellung eines Object-Files aus einer
 # C++ Quelldatei
 %.o: %.cxx
-	g++ $(CFLAGS) -c -o $@ $<
-	
+	g++ $(CFLAGS) -c -o build/$@ $<
+
 
 # da C++-Dateien Header-Dateien inkludieren, sollten deren Abhaengigkeiten
 # bekannt gemacht werden. Dies geschieht in den Dateien mit der Endung .d
 # GCC kann diese automatisch mit dem Schalter -M aus Quelltexten erstellen.
 %.d: %.cxx
-	g++ -M $^ > $@
-	
+	@mkdir -p build
+	g++ -M $^ > build/$@
+
 # hier werden sie inkludiert
 # Falls sie nicht existieren, wird make das zwar melden, diese Dateien
 # jedoch sofort mit der obigen Regel erzeugen und einbinden.
@@ -59,5 +59,3 @@ include  $(patsubst %.cxx,%.d,$(wildcard *.cxx))
 clean:
 	-rm $(patsubst %.cxx,%.d,$(wildcard *.cxx))
 	-rm $(patsubst %.cxx,%.o,$(wildcard *.cxx))
-
-

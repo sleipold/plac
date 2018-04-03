@@ -1,56 +1,38 @@
 
 /****************** lexmain.cxx *********************/
 
-/* Hauptprogramm zum Test der lexikalischen Analyse 
+/* Hauptprogramm zum Test der lexikalischen Analyse
 
 		Stand: Sommersemester 2018
-		
-
-		
 
 
-		
+
+
+
+
 ************************************************/
 
 
-#ifndef GLOBAL_H 
+#ifndef GLOBAL_H
 #include "global.h"
-#endif 
+#endif
 
+int main(int argc, char** argv) {
+	int lookahead = -1;
 
+	/* Initialisierungen der lexikalischen Analyse durchfÃ¼hren */
+	initialize(argc, argv);
 
-
-
-
-int main()
-{
-	int lookahead = -1; 
-
-	/* Initialisierungen der lexikalischen Analyse durchführen */
-	initialize(); 
-
-	/* 1. Symbol lesen  */ 
-		
+	/* 1. Symbol lesen  */
 	lookahead = nextsymbol();
-  
-	/* Symbol ausgeben */ 
-	fout << "		Tokentyp=    " <<lookahead; 
-  
- /* Symbole aus Eingabedatei lesen bis Dateiende */ 
-  while (lookahead != DONE)
-	{ 	
+
+	/* Symbol ausgeben */
+	fout << "		Tokentyp=    " << lookahead;
+
+ /* Symbole aus Eingabedatei lesen bis Dateiende */
+  while (lookahead != DONE) {
 		lookahead = nextsymbol();
-		fout << "		Tokentyp=    " <<lookahead; 
-
+		fout << "		Tokentyp=    " << lookahead;
  	}
-
 	exit(0); 	/* Erfolg */
 }
-
-
-  
-
- 
-
-
-
