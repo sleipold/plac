@@ -2,170 +2,112 @@
 /*************** Scanner *******************************/
 
 
-#ifndef GLOBAL_H 
+#ifndef GLOBAL_H
 #include "global.h"
-#endif 
+#endif
+
+#define NORW   14   		/* Zahl der reservierten Worte */
+#define RWSYMLEN  15		/* Max. LÃ¤nge reservierter Symbole */
 
 
+int lineno;					/* Zeilennummer */
 
-#define NORW   14   		/* Zahl der reservierten Worte */ 
+int num ;           /* Wert einer int-Konstanten  */
+double realnum; 		/* Wert einer real-Konstanten*/
 
-#define RWSYMLEN  15		/* Max. Länge reservierter Symbole */ 
-
-
-
-
+char idname[BSIZE];      /* Name eines Bezeichners ; wird vom Parser weiterverwendet */
 
 
-int lineno;					/* Zeilennummer */                            		
-
-int num ;                  	/* Wert einer int-Konstanten  */
-double realnum; 			/* Wert einer real-Konstanten*/ 
-
-char idname[BSIZE];      /* Name eines Bezeichners ;
-							wird vom Parser weiterverwendet */ 
+char actchar;       /* gelesenes Zeichen */
 
 
-char actchar;                /* gelesenes Zeichen */ 
-                      
+/*  Um Bezeichner von reservierten Symbolene unterscheiden zu kÃ¶nnen,
+wird eine Tabelle reservierte Worte verwendet (restable).
+Die Tabelle enthÃ¤lt EintrÃ¤ge fÃ¼r jedes SchlÃ¼sselwort, bestehend aus
+dem SchlÃ¼sselwort selbst und dem zugehÃ¶rigen Tokentyp (Codierung vgl.global.h):
+Bei Erkennen eines mÃ¶glichen Bezeichners wird zuerst die Tabelle
+der reservierten Symbole durchsucht (lookforres);
+wird ein SchlÃ¼sselwort gefunden, liefert lookforres den dem SchlÃ¼sselwort
+zugeordneten Tokentyp; sonst 0. Bei Ergebnis 0 liegt dann tatsÃ¤chlich ein
+Bezeichner vor.
+*/
 
 
+/* Struktur eines Eintrags in der Tabelle reservierter Symbole */
+struct ressw {
+  char ressymbol [RWSYMLEN];			/* Symbol */
+  int token;							/* zugehÃ¶riger Tokentyp */
+};
 
-/*  Um Bezeichner von reservierten Symbolene unterscheiden zu können,
-wird eine Tabelle reservierte Worte verwendet (restable). 
+/* Tabelle reservierter Worte */
+struct ressw restable [] = {
+  {"const", CONST},
+	{"var", VAR},
+	{"procedure", PROCEDURE},
+	{"call", CALL},
+	{"begin", BEGIN},
+	{"end", END},
+	{"if", IF},
+	{"then", THEN},
+	{"else",ELSE},
+	{"while",WHILE},
+	{"do", DO},
+	{"int", INT},
+	{"real", REAL},
+	{"fi", FI}
+};
 
-Die Tabelle enthält Einträge für jedes Schlüsselwort, bestehend aus 
-dem Schlüsselwort selbst und dem zugehörigen Tokentyp (Codierung vgl.global.h):
+/* Suchen nach einem reservierten Symbol */
 
-Bei Erkennen eines möglichen Bezeichners wird zuerst die Tabelle
-der reservierten Symbole durchsucht (lookforres); 
-wird ein Schlüsselwort gefunden, liefert lookforres den dem Schlüsselwort 
-zugeordneten Tokentyp; sonst 0. Bei Ergebnis 0 liegt dann tatsächlich ein
-Bezeichner vor. 
-*/ 
-
-
-
-
-/* Struktur eines Eintrags in der Tabelle reservierter Symbole */ 
-
-
-struct ressw 
-
-{ char ressymbol [RWSYMLEN];			/* Symbol */             
-  int token;							/* zugehöriger Tokentyp */ 
-} ;
-
-
-
-/* Tabelle reservierter Worte */ 
-
-
-struct ressw 
-			restable [] =  
-				{	"const", CONST,
-					"var", VAR,
-					"procedure", PROCEDURE,
-					"call", CALL,
-					"begin", BEGIN,	
-					"end", END,
-					"if", IF,		
-					"then", THEN,
-					"else",ELSE,
-					"while",WHILE,
-					"do", DO,
-					"int", INT,
-					"real", REAL,
-					"fi", FI
-				};
-
-
-
-
-
-/* Suchen nach einem reservierten Symbol */ 
-
-int lookforres( char *s)
-
-/* Sucht in Tabelle reservierter Worte nach s und liefert zugehörigen Token
+/* Sucht in Tabelle reservierter Worte nach s und liefert zugehÃ¶rigen Token
    falls gefunden,
-   sonst 0 
-*/ 
-
-{	struct ressw *ptr; 
-
-	for ( ptr = restable; ptr < &restable[NORW]; ptr++ )
-
-		if (strcmp (ptr->ressymbol,s) == 0)
-								/* Symbol gefunden */
-			return (ptr->token);
-	
-		return(0);				/* Symbol nicht gefunden */ 
+   sonst 0
+*/
+int lookforres( char *s) {
+  struct ressw *ptr;
+  for ( ptr = restable; ptr < &restable[NORW]; ptr++ ) {
+    if (strcmp(ptr->ressymbol, s) == 0) {
+			return (ptr->token); /* Symbol gefunden */
+    }
+  }
+	return(0); /* Symbol nicht gefunden */
 }
 
+/******************* Initialisieren des Scanners **********************/
 
-
-
-
-
-/******************* Initialisieren des Scanners **********************/ 
-
-/* wird aufgerufen von  initialize () aus init.cxx ; 
-nimmt Vorbesetzungen der Variablen num, realnum,  idname und lineno vor; 
-
-
-liest das erste Zeichen aus der Eingabe */ 
-
-
-
-void initlexan()
-
-{ num = NONE;						
-  realnum = 0.0; 
-  idname [0] = '\0';					
+/* wird aufgerufen von  initialize () aus init.cxx ;
+nimmt Vorbesetzungen der Variablen num, realnum,  idname und lineno vor;
+liest das erste Zeichen aus der Eingabe */
+void initlexan() {
+  num = NONE;
+  realnum = 0.0;
+  idname [0] = '\0';
   lineno = 1;
-  fin.get(actchar);			/* Erstes Zeichen der Eingabe lesen */  
-    
-}    
+  fin.get(actchar);			/* Erstes Zeichen der Eingabe lesen */
+}
 
-
-
-
-
-
-/*******************************************************************************/
-/********** Funktion nextsymbol ************************************************/ 
-/*******************************************************************************/
-
-
-/**** zentrale Funktion zum Lesen des nächsten lexikalischen Symbols ***************/ 
-/*****  identifiziert nächstes lexikalisches Symbol der Eingabe **********/
-
-/***** WICHTIG!!!!!   
-		Bei Aufruf von nextsymbol muss  sich das nächste Eingabezeichen bereits in actchar befinden
-
-*******/ 
-
-
-/**    liefert Codierung des nächsten Symbols (token): 
-
-		- Konstante:				token == INTNUM und Wert der Konstanten in Variable num
-									token == REALNUM und Wert in realnum
-		- Bezeichner:				token == ID  und Zeiger auf Name in idname 
-		- Schlüsselwort:			token == Tokentyp des reservierten Symbols nach 
-									Suche in restable 
-		- Operatoren,Sonderzeichen :entsprechende Token 
-
-**/ 
-										
-
-
+/*
+*******************************************************************************
+********** Funktion nextsymbol ************************************************
+*******************************************************************************
+**** zentrale Funktion zum Lesen des nÃ¤chsten lexikalischen Symbols ***************
+*****  identifiziert nÃ¤chstes lexikalisches Symbol der Eingabe **********
+***** WICHTIG!!!!!
+		Bei Aufruf von nextsymbol muss  sich das nÃ¤chste Eingabezeichen bereits in actchar befinden
+*******
+liefert Codierung des nÃ¤chsten Symbols (token):
+   - Konstante:				   token == INTNUM und Wert der Konstanten in Variable num
+									       token == REALNUM und Wert in realnum
+   - Bezeichner:				 token == ID  und Zeiger auf Name in idname
+	 - SchlÃ¼sselwort:			 token == Tokentyp des reservierten Symbols nach Suche in restable
+	 - Operatoren,Sonderzeichen :entsprechende Token
+**/
 
 int nextsymbol () 
 
 {
 	int token;  
-	char lexbuf[BSIZE] ;		/* lokaler Puffer für Eingabezeichen */ 	
+	char lexbuf[BSIZE] ;		/* lokaler Puffer fÃ¼r Eingabezeichen */ 	
 
 
 
@@ -173,7 +115,7 @@ int nextsymbol ()
 	{ 
 
 		if ( actchar== ' ' || actchar== '\t')
-			/*Blank und Tab in Ausgabedatei kopieren und überlesen */ 
+			/*Blank und Tab in Ausgabedatei kopieren und Ã¼berlesen */ 
 			{	fout.put(actchar);
 				fin.get(actchar);
 				
@@ -181,7 +123,7 @@ int nextsymbol ()
 
 
 		else if (actchar== '\n'  ||  actchar == '\r')  
-			/* Newline in Ausgabedatei kopieren, überlesen/entfernen, Zeilennummer erhöhen */ 
+			/* Newline in Ausgabedatei kopieren, Ã¼berlesen/entfernen, Zeilennummer erhÃ¶hen */ 
 			{ fout.put(actchar);
 			  fin.get(actchar);
 			  lineno++;
@@ -192,89 +134,156 @@ int nextsymbol ()
 
 				{ /***** actchar ist Ziffer --> Konstanten erkennen  *****/
 					
-					char zahl [BSIZE];		/* Puffer für Ziffern */ 
-					int b = 0;				/* Zeichenzahl*/ 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-					
-				
-					
+					char zahl [BSIZE];		/* Puffer fÃ¼r Ziffern */ 
+					int b = 0;                      /* Zeichenzahl*/ 
+                                                                                
+                                        zahl[b] = actchar;
+                                        b++;
+                                        
+                                        //check for further digits 
+                                        while(isdigit(actchar)&& !fin.eof()){
+                                            zahl[b] = actchar;
+                                            b++;
+                                            fin.get(actchar);
+                                        }
+                                        //check for realnumbers
+                                        if(actchar == '.'){
+                                            
+                                            zahl[b] = actchar;
+                                            b++;
+                                            
+                                            while(isdigit(actchar)&& !fin.eof()){
+                                                zahl[b] = actchar;
+                                                b++;
+                                                fin.get(actchar);
+                                            }
+                                            
+                                            zahl[b] = '\0';
+                                            
+                                            realnum = atof(zahl);
+                                            token = REALNUM;
+                                            return token;
+                                        }
+                                        
+                                        //return number
+                                        zahl[b] = '\0';
+                                        num = atoi(zahl);
+                                        token = INTNUM;
+                                        return token;                         		
 				}
-
-
+                
 		else if (isalpha(actchar))
 				{ /***** actchar ist Buchstabe -->  Identifikatoren erkennen ****/
-					
-					
+						
 			
 					int b = 0 ;				/* Zeichenzahl */ 
 
 					/* reg. Ausdruck   letter (letter|digit)*  erkennen ==>
 					    solange Buchstaben oder Ziffern folgen --> Identifikator */ 
 					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-
+					while ((isalpha(actchar) || isdigit(actchar))&&!fin.eof()) {
+                                            lexbuf[b] = actchar;
+                                            fin.get(actchar);
+                                            b++;
+                                        }
+                                        
+                                        lexbuf[b] = '\0';
+                                        int resword = lookforres(lexbuf);
+                                        //check for reserved words
+                                        if(resword == 0){
+                                            strcpy(idname, lexbuf);
+                                            token = ID;
+                                            return token;
+                                        }
+                                        
+                                        token = resword;
+                                        return token;
+                                        
 				}
-
-		/***** Sonderzeichen oder Operatoren erkennen ***************/ 
-		
+		/***** Sonderzeichen oder Operatoren erkennen ***************/	
 
 		else    
-			{fout.put(actchar);				/* Zeichen in Ausgabedatei */ 
+			{
+                            fout.put(actchar);				/* Zeichen in Ausgabedatei */ 
 				
 				switch(actchar)
-				{	case '=':	fin.get(actchar);
-								return(EQ);
-
-					
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			
-
-					default: 	error (32); 
+				{
+                                    case '=':	
+                                        fin.get(actchar);
+                                        return(EQ);
+                                                                
+                                        
+                                    case '<':
+                                        fin.get(actchar);
+                                        if(actchar == '='){
+                                            fin.get(actchar);
+                                            return(LE);
+                                        }
+                                        
+                                        return(LT);
+                        
+                                    case '>':
+                                        fin.get(actchar);
+                                        if(actchar == '='){
+                                            fin.get(actchar);
+                                            return(GE);
+                                        }
+                                        
+                                        return(GT);
+                                        
+                                    case ':':
+                                        fin.get(actchar);
+                                        if(actchar == '='){
+                                            fin.get(actchar);
+                                            return(ASS);
+                                        }
+                                        
+                                        return(COLON);
+                                    
+                                    case ',':
+                                        fin.get(actchar);
+                                        return(KOMMA);
+                                    
+                                    case ';': 
+                                        fin.get(actchar);
+                                        return(SEMICOLON);
+                                     
+                                    case '+':
+                                        fin.get(actchar);
+                                        return(PLUS);
+                                        
+                                    case '-':
+                                        fin.get(actchar);
+                                        return(MINUS);
+                                        
+                                    case '*':
+                                        fin.get(actchar);
+                                        return(MULT);
+                                       
+                                    case '/':
+                                        fin.get(actchar);
+                                        return(DIV);
+                                        
+                                    case '(':
+                                        fin.get(actchar);
+                                        return(KLAUF);
+                                        
+                                    case ')':
+                                        fin.get(actchar);
+                                        return(KLZU);
+                                        
+                                    case '$':
+                                        fin.get(actchar);
+                                        return(PROGEND);
+                                    
+                                    case '!': 
+                                        fin.get(actchar);
+                                        if(actchar == '='){
+                                            fin.get(actchar);
+                                            return(NE);
+                                        }
+                                        
+                                    default: 	error (32); 
 							
 				
 				} /* end-switch */ 
@@ -284,7 +293,7 @@ int nextsymbol ()
  	}/* end while */ 
 
 
- 	return(DONE); 	/* EIngabe -Ende erreicht */ 
+ 	return(DONE); 	/* Eingabe -Ende erreicht */ 
 		
 }
 
