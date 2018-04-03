@@ -402,14 +402,56 @@ Schnittstelle:
 
 */
 void vardecl() {
-  st_entry* neu, *found;
+	st_entry* neu, *found;
 
-  if (tracesw)
-	    trace << "\n Zeile:" << lineno << "Variablendeklaration:";
+	if (tracesw)
+		trace << "\n Zeile:" << lineno << "Variablendeklaration:";
 
 	// nach var muss Identifikator folgen
-  // TODO
-  return;
+	// TODO
+	if(lookahead != ID) {
+		error(4);
+	}
+
+	lookahead = nextsymbol();
+	if(lookahead != COLON) {
+		error(35);
+	}
+
+	// Prüfen auf Doppeldekleration
+	if(lookup_in_actsym(idname) != NULL) {
+		error(34);
+	}
+
+	lookahead = nextsymbol();
+	// Überprüfung des Variablen-Typs
+	switch(lookahead) {
+		case INT:
+			insert(INTIDENT);
+			break;
+		case REAL:
+			insert(REALIDENT);
+			break;
+		default:
+			error(36);
+			break;
+	}
+
+	lookahead = nextsymbol();
+	// mehrere Deklerationen können folgen
+	switch(lookahead) {
+		case KOMMA:
+			lookahead = nextsymbol();
+			vardecl();
+			break;
+		case SEMICOLON:
+			lookahead = nextsymbol();
+			return;
+		case default:
+			error(5);
+			break;
+	}
+	return;	// end vardecl
 }
 
 /****************** constdecl ***************************************************/
