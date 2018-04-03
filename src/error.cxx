@@ -67,7 +67,8 @@ string errtxt[] = {
 /*36*/	"Unzulässiger Typ",
 /*37*/  "Falsche Eintragsart in Symboltabelle",
 /*38*/	"Keine korrekte reelle Konstante ",
-/*39 */	" fi fehlt"
+/*39*/	" fi fehlt",
+/*40*/	"else-Zweig oder fi erwartet"
 };
 
 /***************** Fehlerfunktion **********************/

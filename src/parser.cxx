@@ -251,33 +251,63 @@ void statement() {
 		if(found->token != PROC) {
 			error(14);
 		}
-
-		lookahead = nextsymbol();
 	}
 
 	// begin STATEMENT { ';' STATEMENT }* end
 	else if(lookahead == BEGIN) {
 		lookahead = nextsymbol();
 		statement();
+
 		while(lookahead == SEMICOLON) {
 			lookahead = nextsymbol();
 			statement();
 		}
+
 		if(lookahead != END) {
 			error(16);
 		}
-		lookahead = nextsymbol();
 	}
 
 	//if CONDITION then STATEMENT [else STATEMENT ] fi
+	else if(lookahead == IF) {
+		lookahead = nextsymbol();
+		condition();
+
+		lookahead = nextsymbol();
+		if(lookahead != THEN) {
+			error(15);
+		}
+
+		lookahead = nextsymbol();
+		statement();
+
+		lookahead = nextsymbol();
+		switch(lookahead) {
+			case ELSE:
+				statement();
+				break;
+			case FI:
+				lookahead = nextsymbol();
+				return;
+			default: 
+				error(40);
+		}
+
+		lookahead = nextsymbol();
+		if(lookahead != FI) {
+			error(39);
+		}
+	}
 
 	// while CONDITION do STATEMENT
 	else if(lookahead == WHILE) {
 		lookahead = nextsymbol();
 		condition();
+
 		if(lookahead != DO) {
 			error(17);
 		}
+		
 		lookahead = nextsymbol();
 		statement();
 	}
@@ -286,7 +316,8 @@ void statement() {
 		errortext("Statement wird erwartet");
 	}
 
-  return;
+	lookahead = nextsymbol();
+	return;
 }
 
 
