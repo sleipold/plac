@@ -253,6 +253,8 @@ void statement() {
 		if(found->token != PROC) {
 			error(14);
 		}
+		
+		lookahead = nextsymbol();
 	}
 
 	// begin STATEMENT { ';' STATEMENT }* end
