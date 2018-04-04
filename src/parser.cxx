@@ -380,7 +380,7 @@ void procdecl() {
 
 	lookahead = nextsymbol();
 	while(lookahead == PROCEDURE) {
-		lookahead(nextsymbol);
+		lookahead = nextsymbol();
 		procdecl();
 	}
 
@@ -447,7 +447,7 @@ void vardecl() {
 		case SEMICOLON:
 			lookahead = nextsymbol();
 			return;
-		case default:
+		default:
 			error(5);
 	}
 	return;	// end vardecl
@@ -505,7 +505,7 @@ void constdecl() {
 		case SEMICOLON:
 			lookahead = nextsymbol();
 			return;
-		case default:
+		default:
 			error(5);
 	}
 	return;		// end constdecl
@@ -570,7 +570,7 @@ void block(symtable * neusym) {
 
 	// bei Blockende : Symboltabelle zurücksetzen
 	// actsym = Zeiger auf vorherige Symboltabelle
-	actsym = neusym.precsym;
+	actsym = neusym->precsym;
 	// TODO
 	return;
 }

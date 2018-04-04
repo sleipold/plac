@@ -21,7 +21,7 @@
 #		Hier wird % als Wildcard verwendet.
 
 # Variablendeklarationen
-CFLAGS=-Wall -g
+CFLAGS=-Wall -g -std=c++11
 LDFLAGS=
 
 # Regeln, die _keine_ Dateien mit dem Namen der Regel erstellen, sind "phony"
