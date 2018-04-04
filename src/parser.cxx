@@ -216,11 +216,13 @@ void statement() {
 	// TODO
 	// IDENT  ':=' EXPRESSION
 	if(lookahead == ID) {
+ 
 		// ST nach idname durchsuchen, idname muss bereits existieren
-		if((found = lookup(idname)) == NULL) {
+                found = lookup(idname);
+		if(found == NULL) {
 			error(10);
 		}
-
+                
 		lookahead = nextsymbol();
 		if(lookahead != ASS) {
 			error(40);
@@ -229,7 +231,7 @@ void statement() {
 		if(found->token == KONST || found->token == PROC) {
 			error(11);
 		}
-
+                
 		lookahead = nextsymbol();
 		exp();
 	}
@@ -257,12 +259,11 @@ void statement() {
 	else if(lookahead == BEGIN) {
 		lookahead = nextsymbol();
 		statement();
-
+                
 		while(lookahead == SEMICOLON) {
 			lookahead = nextsymbol();
 			statement();
 		}
-
 		if(lookahead != END) {
 			error(16);
 		}
@@ -270,10 +271,10 @@ void statement() {
 
 	// if CONDITION then STATEMENT [else STATEMENT ] fi
 	else if(lookahead == IF) {
+                cout << "If triggered" << endl;
 		lookahead = nextsymbol();
 		condition();
-
-		lookahead = nextsymbol();
+                
 		if(lookahead != THEN) {
 			error(15);
 		}
@@ -290,13 +291,13 @@ void statement() {
 		if(lookahead != FI) {
 			error(39);
 		}
+                lookahead = nextsymbol();
 	}
 
 	// while CONDITION do STATEMENT
 	else if(lookahead == WHILE) {
 		lookahead = nextsymbol();
 		condition();
-
 		if(lookahead != DO) {
 			error(17);
 		}
@@ -309,7 +310,7 @@ void statement() {
 		errortext("Statement wird erwartet");
 	}
 
-	lookahead = nextsymbol();
+	//lookahead = nextsymbol();
 	return;	// end statement
 }
 
@@ -361,8 +362,8 @@ void procdecl() {
 
 	lookahead = nextsymbol();
 	block(actsym);
-
 	lookahead = nextsymbol();
+        
 	if(lookahead != SEMICOLON) {
 		error(5);
 	}
@@ -555,11 +556,12 @@ void block(symtable * neusym) {
 
 	if( lookahead == PROCEDURE ) {
 		lookahead = nextsymbol();
-		procdecl();
+              	procdecl();
+                
 	}
 
 	statement();
-
+        lookahead = nextsymbol();
 	// bei Blockende : Symboltabelle zurücksetzen
 	// actsym = Zeiger auf vorherige Symboltabelle
 	actsym = neusym->precsym;
@@ -593,7 +595,7 @@ void program() {
 
 	// Block muss folgen
 	block (firstsym);
-
+        cout << "prog trig" << endl;
 	//  nach Block muss '$' folgen
 	if (lookahead == PROGEND)
 		// nächstes Symbol lesen
