@@ -210,7 +210,7 @@ void statement() {
 	int typ_left, typ_right;
 
 	if (tracesw)
-		trace<<"\n Zeile:"<< lineno<<"Statement";
+		trace<<"\n Zeile:"<< lineno<<"Statement" << endl;
 
 	// überprüfung des aktuellen lex. Symbols
 	// TODO
@@ -259,7 +259,6 @@ void statement() {
 		statement();
 
 		while(lookahead == SEMICOLON) {
-			cout << "triggerd"; 
 			lookahead = nextsymbol();
 			statement();
 		}
