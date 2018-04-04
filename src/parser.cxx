@@ -417,6 +417,8 @@ void vardecl() {
 		error(34);
 	}
 
+	cout << idname << endl;
+
 	lookahead = nextsymbol();
 	// Überprüfung des Variablen-Typs
 	switch(lookahead) {
