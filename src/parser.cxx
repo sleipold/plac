@@ -218,7 +218,8 @@ void statement() {
 	if(lookahead == ID) {
  
 		// ST nach idname durchsuchen, idname muss bereits existieren
-                found = lookup(idname);
+		found = lookup(idname);
+		cout << idname << endl;
 		if(found == NULL) {
 			error(10);
 		}
