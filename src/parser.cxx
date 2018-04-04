@@ -283,31 +283,15 @@ void statement() {
 
 		lookahead = nextsymbol();
 		// hier darf entweder else oder fi folgen
-		switch(lookahead) {
-			case ELSE:
-				statement();
-				break;
-			case FI:
-				lookahead = nextsymbol();
-				if(lookahead != SEMICOLON) {
-					error(16);
-				}
-				return;
-			default: 
-				error(40);
+		if(lookahead == ELSE) {
+			lookahead = nextsymbol();
+			statement();
 		}
 
 		lookahead = nextsymbol();
 		if(lookahead != FI) {
 			error(39);
 		}
-
-		lookahead = nextsymbol();
-		if(lookahead != SEMICOLON) {
-			error(16);
-		}
-		
-		lookahead = nextsymbol();
 	}
 
 	// while CONDITION do STATEMENT
