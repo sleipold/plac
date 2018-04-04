@@ -286,9 +286,9 @@ void statement() {
 		if(lookahead == ELSE) {
 			lookahead = nextsymbol();
 			statement();
+			lookahead = nextsymbol();
 		}
 
-		lookahead = nextsymbol();
 		if(lookahead != FI) {
 			error(39);
 		}
