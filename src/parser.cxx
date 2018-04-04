@@ -219,7 +219,6 @@ void statement() {
  
 		// ST nach idname durchsuchen, idname muss bereits existieren
 		found = lookup(idname);
-		cout << idname << endl;
 		if(found == NULL) {
 			error(10);
 		}
@@ -265,14 +264,15 @@ void statement() {
 			lookahead = nextsymbol();
 			statement();
 		}
+
 		if(lookahead != END) {
+			cout << lookahead << endl;
 			error(16);
 		}
 	}
 
 	// if CONDITION then STATEMENT [else STATEMENT ] fi
 	else if(lookahead == IF) {
-                cout << "If triggered" << endl;
 		lookahead = nextsymbol();
 		condition();
                 
@@ -411,8 +411,6 @@ void vardecl() {
 	if(lookup_in_actsym(idname) != NULL) {
 		error(34);
 	}
-
-	cout << idname << endl;
 
 	lookahead = nextsymbol();
 	// Überprüfung des Variablen-Typs
@@ -594,7 +592,6 @@ void program() {
 
 	// Block muss folgen
 	block (firstsym);
-        cout << "prog trig" << endl;
 	//  nach Block muss '$' folgen
 	if (lookahead == PROGEND)
 		// nächstes Symbol lesen
