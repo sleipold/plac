@@ -353,8 +353,6 @@ void procdecl() {
 
 	// liefert den neuen Eintrag in der neuen ST
 	neu = lookup_in_actsym(idname);
-	// neue ST holen
-	actsym = neu->subsym;
 
 	lookahead = nextsymbol();
 	if(lookahead != SEMICOLON) {
@@ -362,15 +360,12 @@ void procdecl() {
 	}
 
 	lookahead = nextsymbol();
-	block(actsym);
+	block(neu->subsym);
 	lookahead = nextsymbol();
         
 	if(lookahead != SEMICOLON) {
 		error(5);
 	}
-
-	// alte ST holen
-	actsym = actsym->precsym;
 
 	lookahead = nextsymbol();
 	while(lookahead == PROCEDURE) {
@@ -542,6 +537,7 @@ Schnittstelle:
 void block(symtable * neusym) {
 	if (tracesw)
 		trace<<"\n Zeile:"<< lineno<<"Block";
+
 
 	// actsym auf neue Symboltabelle setzen
 	actsym = neusym;
