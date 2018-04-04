@@ -27,12 +27,12 @@ int main(int argc, char** argv) {
 	lookahead = nextsymbol();
 
 	/* Symbol ausgeben */
-	fout << "		Tokentyp=    " << lookahead;
+	fout << "		Tokentyp=    " << lookahead << endl;
 
  /* Symbole aus Eingabedatei lesen bis Dateiende */
   while (lookahead != DONE) {
 		lookahead = nextsymbol();
-		fout << "		Tokentyp=    " << lookahead;
+		fout << "		Tokentyp=    " << lookahead << endl;
  	}
 	exit(0); 	/* Erfolg */
 }
