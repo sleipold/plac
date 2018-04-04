@@ -280,13 +280,11 @@ void statement() {
 
 		lookahead = nextsymbol();
 		statement();
-
-		lookahead = nextsymbol();
+		
 		// hier darf entweder else oder fi folgen
 		if(lookahead == ELSE) {
 			lookahead = nextsymbol();
 			statement();
-			lookahead = nextsymbol();
 		}
 
 		if(lookahead != FI) {
