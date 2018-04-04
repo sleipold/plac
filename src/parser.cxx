@@ -232,6 +232,7 @@ void statement() {
 
 		lookahead = nextsymbol();
 		exp();
+		lookahead = nextsymbol();
 	}
 
 	// call IDENT 
