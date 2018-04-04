@@ -146,24 +146,23 @@ int nextsymbol()
             }
             //check for realnumbers
             if (actchar == '.') {
-
+                fout.put(actchar);
                 zahl[b] = actchar;
                 b++;
-                fout.put(actchar);
                 fin.get(actchar);
-
-                while (isdigit(actchar)&& !fin.eof()) {
-                    zahl[b] = actchar;
-                    b++;
-                    fin.get(actchar);
-
-                    if (isdigit(actchar)) {
-                        fout.put(actchar);
-                    }
-                }
+                
                 if(!isdigit(actchar)){
                     error(32);
                 }
+                while (isdigit(actchar)&& !fin.eof()) {
+                    zahl[b] = actchar;
+                    b++;
+                    if (isdigit(actchar)) {
+                        fout.put(actchar);
+                    }
+                    fin.get(actchar);
+                }
+              
                 zahl[b] = '\0';
 
                 realnum = atof(zahl);
