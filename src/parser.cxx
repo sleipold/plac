@@ -259,6 +259,7 @@ void statement() {
 		statement();
 
 		while(lookahead == SEMICOLON) {
+			printf("triggerd\n");
 			lookahead = nextsymbol();
 			statement();
 		}
@@ -280,7 +281,7 @@ void statement() {
 
 		lookahead = nextsymbol();
 		statement();
-		
+
 		// hier darf entweder else oder fi folgen
 		if(lookahead == ELSE) {
 			lookahead = nextsymbol();
