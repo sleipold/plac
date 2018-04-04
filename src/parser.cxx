@@ -259,7 +259,7 @@ void statement() {
 		statement();
 
 		while(lookahead == SEMICOLON) {
-			printf("triggerd\n");
+			cout << "triggerd"; 
 			lookahead = nextsymbol();
 			statement();
 		}
