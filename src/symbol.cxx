@@ -174,8 +174,8 @@ void printsymtab(symtable *sptr) {
   int i;
 	st_entry *act;
 
-	fsym << "\nAnzahl der Einträge:" << sptr->anzahl << "\n";
-	fsym << "Blockniveau:" << sptr->level << "\n";
+	fsym << "\nAnzahl der Einträge:" << sptr->anzahl << endl;
+	fsym << "Blockniveau:" << sptr->level << endl;
 
   /* alle Einträge der ST ausgeben */
 	for(i = 0; i <sptr->anzahl; i++) {
@@ -183,13 +183,13 @@ void printsymtab(symtable *sptr) {
     fsym << "Eintrag-Nr:" << i + 1;
 
 		/* Name, Art, Wert ausgeben */
-    fsym << "\t" << act->name << "\t" << act->token << "\t" << act->wertaddr << "\n";
+    fsym << "\t" << act->name << "\t" << act->token << "\t" << act->wertaddr << endl;
 
     /* Bei PROC-Einträgen --> zur Prozedur gehörende ST ausgeben */
 	  if(act->token == PROC) {
-      fsym << "\nSymboltabelle zu\t" << act->name << "\n";
+      fsym << "\nSymboltabelle zu\t" << act->name << endl;
       printsymtab(act->subsym);
-			fsym << "\nEnde Symboltabelle zu\t" << act->name << "\n";
+			fsym << "\nEnde Symboltabelle zu\t" << act->name << endl;
 		}
   }
 }

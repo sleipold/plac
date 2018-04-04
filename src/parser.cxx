@@ -268,7 +268,6 @@ void statement() {
 		}
 
 		if(lookahead != END) {
-			cout << lookahead << endl;
 			error(16);
 		}
 	}
