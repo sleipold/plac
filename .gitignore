@@ -1,5 +1,7 @@
 *.d
 *.o
+*.txt
+*.out
 build
 lexmain
 parsemain
