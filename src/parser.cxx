@@ -351,7 +351,7 @@ void procdecl() {
 	} 
 
 	// Überprüfung ob idname bereits im aktuellen scope bekannt
-	if(lookup_in_actsym(idname) == NULL) {
+	if(lookup_in_actsym(idname) != NULL) {
 		error(34);
 	}
 
