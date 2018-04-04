@@ -268,7 +268,7 @@ void statement() {
 		}
 	}
 
-	//if CONDITION then STATEMENT [else STATEMENT ] fi
+	// if CONDITION then STATEMENT [else STATEMENT ] fi
 	else if(lookahead == IF) {
 		lookahead = nextsymbol();
 		condition();
@@ -289,6 +289,9 @@ void statement() {
 				break;
 			case FI:
 				lookahead = nextsymbol();
+				if(lookahead != SEMICOLON) {
+					error(16);
+				}
 				return;
 			default: 
 				error(40);
@@ -298,6 +301,13 @@ void statement() {
 		if(lookahead != FI) {
 			error(39);
 		}
+
+		lookahead = nextsymbol();
+		if(lookahead != SEMICOLON) {
+			error(16);
+		}
+		
+		lookahead = nextsymbol();
 	}
 
 	// while CONDITION do STATEMENT
