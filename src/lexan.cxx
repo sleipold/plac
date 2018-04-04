@@ -149,6 +149,8 @@ int nextsymbol()
 
                 zahl[b] = actchar;
                 b++;
+                fout.put(actchar);
+                fin.get(actchar);
 
                 while (isdigit(actchar)&& !fin.eof()) {
                     zahl[b] = actchar;
@@ -159,7 +161,9 @@ int nextsymbol()
                         fout.put(actchar);
                     }
                 }
-
+                if(!isdigit(actchar)){
+                    error(32);
+                }
                 zahl[b] = '\0';
 
                 realnum = atof(zahl);
