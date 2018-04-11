@@ -174,6 +174,7 @@ int nextsymbol()
             zahl[b] = '\0';
             num = atoi(zahl);
             token = INTNUM;
+            cout << num << endl;
             return token;
         }
         else if (isalpha(actchar)) { /***** actchar ist Buchstabe -->  Identifikatoren erkennen ****/
