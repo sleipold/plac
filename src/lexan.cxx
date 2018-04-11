@@ -131,8 +131,8 @@ int nextsymbol()
             char zahl [BSIZE]; /* Puffer für Ziffern */
             int b = 0; /* Zeichenzahl*/
 
-            zahl[b] = actchar;
-            b++;
+            //zahl[b] = actchar;
+            //b++;
 
             //check for further digits 
             while (isdigit(actchar)&& !fin.eof()) {
@@ -172,7 +172,6 @@ int nextsymbol()
 
             //return number
             zahl[b] = '\0';
-            cout << zahl << endl;
             num = atoi(zahl);
             token = INTNUM;
             return token;
