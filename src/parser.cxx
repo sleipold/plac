@@ -26,7 +26,7 @@ int factor() {
 	int factor_typ;
 
 	if (tracesw)
-	 trace << "\n Zeile:" << lineno << "	Faktor";
+	 trace << "\n Zeile:" << lineno << "	Faktor" << endl;
 
   // je nach nächstem Eingabesymbol in lookahead
 	switch(lookahead) {
@@ -108,7 +108,7 @@ int term() {
   int ret;
 
 	if (tracesw)
-    trace << "\n Zeile:" << lineno << "Term:";
+    trace << "\n Zeile:" << lineno << "Term:" << endl;
 	ret = factor();
 	// korrekter Factor
 
@@ -134,7 +134,7 @@ Schnittstelle:
 int exp() {
 	int typ_left,typ_right;
 	if (tracesw)
-	    trace<<"\n Zeile:"<< lineno<<"Ausdruck";
+	    trace<<"\n Zeile:"<< lineno<<"Ausdruck" << endl;
 
 	typ_left = term();
 	// korrekter Term
@@ -163,7 +163,7 @@ int condition() {
   int typ_left, typ_right;
 
 	if (tracesw)
-	    trace<<"\n Zeile:"<< lineno<<"Condition";
+	    trace<<"\n Zeile:"<< lineno<<"Condition" << endl;
 
 	typ_left = exp();
 	// korrekter Ausdruck
@@ -338,7 +338,7 @@ void procdecl() {
 	symtable* neusym;		// Zeiger auf Symboltabelle
 
 	if (tracesw)
-		trace<<"\n Zeile:"<< lineno<<"Procdeklaration:";
+		trace<<"\n Zeile:"<< lineno<<"Procdeklaration:" << endl;
 
 	// TODO
 	if(lookahead != ID) {
@@ -395,7 +395,7 @@ void vardecl() {
 	st_entry* neu, *found;
 
 	if (tracesw)
-		trace << "\n Zeile:" << lineno << "Variablendeklaration:";
+		trace << "\n Zeile:" << lineno << "Variablendeklaration:" << endl;
 
 	// nach var muss Identifikator folgen
 	// TODO
@@ -461,7 +461,7 @@ void constdecl() {
 	st_entry *neu, *found;
 
 	if (tracesw)
-		trace<<"\n Zeile:"<< lineno<<"Konstantendeklaration:";
+		trace<<"\n Zeile:"<< lineno<<"Konstantendeklaration:" << endl;
 
 	// auf const muss IDENT folgen
 	// TODO
@@ -535,7 +535,7 @@ Schnittstelle:
 /* symtable * neusym :	Zeiger auf neue ST */
 void block(symtable * neusym) {
 	if (tracesw)
-		trace<<"\n Zeile:"<< lineno<<"Block";
+		trace<<"\n Zeile:"<< lineno<<"Block" << endl;
 
 
 	// actsym auf neue Symboltabelle setzen
@@ -583,7 +583,7 @@ Schnittstelle:
 */
 void program() {
   if (tracesw)
-	  trace <<"\n Zeile:"<< lineno<<"Programm";
+	  trace <<"\n Zeile:"<< lineno<<"Programm" << endl;
 
 	// globale Symboltabelle  anlegen (firstsym
 	firstsym = create_newsym();
