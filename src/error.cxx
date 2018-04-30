@@ -75,12 +75,14 @@ string errtxt[] = {
 /* Funktion gibt den der Nummer nr entsprechenden Fehlertext aus */
 void error( int nr ) {
 	ferr << "Zeile" << lineno << errtxt[nr] << endl;
+	fout << endl;
 	exit(1);
 }
 
 /* Funktion gibt den angegebenen  Fehlertext aus */
 void errortext( string text) {
 	ferr << "Zeile" << lineno << text << endl;
+	fout << endl;
 	exit(1);
 }
 
