@@ -19,5 +19,6 @@ int main(int argc, char** argv) {
 	program();
 	// Analyse korrekt beendet --> ST ausgeben; Abschlussarbeiten
 	stop();
+	fout << endl;
 	exit(0); 			// Erfolg
 }
