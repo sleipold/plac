@@ -312,7 +312,7 @@ void statement() {
 		errortext("Statement wird erwartet");
 	}
 
-	//lookahead = nextsymbol();
+	lookahead = nextsymbol();
 	return;	// end statement
 }
 
@@ -363,7 +363,6 @@ void procdecl() {
 
 	lookahead = nextsymbol();
 	block(neu->subsym);
-	lookahead = nextsymbol();
 
 	if(lookahead != SEMICOLON) {
 		cout << "zweites" << endl;
@@ -561,7 +560,7 @@ void block(symtable * neusym) {
 	}
 
 	statement();
-    lookahead = nextsymbol();
+    //lookahead = nextsymbol();
 	// bei Blockende : Symboltabelle zurücksetzen
 	// actsym = Zeiger auf vorherige Symboltabelle
 	actsym = neusym->precsym;
