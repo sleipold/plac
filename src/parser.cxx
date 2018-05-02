@@ -362,7 +362,6 @@ void procdecl() {
 
 	lookahead = nextsymbol();
 	block(neu->subsym);
-	lookahead = nextsymbol();
         
 	if(lookahead != SEMICOLON) {
 		error(5);
@@ -554,12 +553,12 @@ void block(symtable * neusym) {
 
 	if( lookahead == PROCEDURE ) {
 		lookahead = nextsymbol();
-              	procdecl();
+        procdecl();
                 
 	}
 
 	statement();
-        lookahead = nextsymbol();
+    lookahead = nextsymbol();
 	// bei Blockende : Symboltabelle zurücksetzen
 	// actsym = Zeiger auf vorherige Symboltabelle
 	actsym = neusym->precsym;
