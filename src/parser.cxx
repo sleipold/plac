@@ -312,7 +312,7 @@ void statement() {
 		errortext("Statement wird erwartet");
 	}
 
-	//lookahead = nextsymbol();
+	lookahead = nextsymbol();
 	return;	// end statement
 }
 
