@@ -357,6 +357,7 @@ void procdecl() {
 
 	lookahead = nextsymbol();
 	if(lookahead != SEMICOLON) {
+		cout << "erstes" << endl;
 		error(5);
 	}
 
@@ -364,6 +365,7 @@ void procdecl() {
 	block(neu->subsym);
         
 	if(lookahead != SEMICOLON) {
+		cout << "zweites" << endl;
 		error(5);
 	}
 
