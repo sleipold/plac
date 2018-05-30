@@ -1,2 +1,2 @@
 # plac
-Compiler for PLA
+Compiler for PLA18
